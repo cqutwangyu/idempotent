@@ -1,9 +1,6 @@
 package com.wy.idempotent.controller;
 
-import com.wy.idempotent.annotation.AutoIdempotent;
-import com.wy.idempotent.token.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.wy.idempotent.annotation.RepeatSubmit;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,16 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class HelloController {
-    @Autowired
-    TokenService tokenService;
-
-    @GetMapping("/gettoken")
-    public String getToken() {
-        return tokenService.createToken();
-    }
 
     @PostMapping("/hello")
-    @AutoIdempotent
+    @RepeatSubmit(interval = 10000)
     public String hello() {
         return "hello";
     }
